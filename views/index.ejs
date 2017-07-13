@@ -30,7 +30,12 @@
   <body>
     <h1>The Dojo Message Board</h1>
 
-    
+      <% if(typeof(errors) != 'undefined' ) { %>
+        <% for (var x = 0; x < errors.length; x++) { %>
+          <h3><%= errors[x] %></h3>
+        <% } %>
+      <% } %>
+      
       <form  action="message" method="POST">
           Name: <br>
             <input type="text" name="name" ><br>
@@ -40,33 +45,33 @@
       </form>
     
     
-    <% for(var i=0; i < message.length; i++) { %>
-      <div class="postpost">
-        
-        <p><%= message[i].name %></p>
-        <p><%= message[i].text %>  </p>
-        <div class="comment">
-          <% for(var x=0; x < message[i].comments.length; x++) { %>
+      <% for(var i=0; i < message.length; i++) { %>
+        <div class="postpost">
           
-            
-                <p><%= message[i].comments[x] %>  </p>
+          <p><%= message[i].name %></p>
+          <p><%= message[i].text %>  </p>
+          <div class="comment">
+            <% for(var x=0; x < message[i].comments.length; x++) { %>
             
               
-            <% } %>
-          
-          <form  action="/posts/<%= message[i].id %>" method="POST">
-            <input type="hidden" value="<%= message[i].id %>">
-            Name: <br>
-              <input type="text" name="name" ><br>
-            Comment: <br>
-              <textarea name="text" rows="5" cols="80"></textarea><br>
-              <input type='submit' value='leave Comment'>
-          </form>
-        </div> 
+                  <p><%= message[i].comments[x].name %>  </p>
+                  <p><%= message[i].comments[x].text %>  </p>
+                
+              <% } %>
+            
+            <form  action="/posts/<%= message[i].id %>" method="POST">
+              <input type="hidden" value="<%= message[i].id %>">
+              Name: <br>
+                <input type="text" name="name" ><br>
+              Comment: <br>
+                <textarea name="text" rows="5" cols="80"></textarea><br>
+                <input type='submit' value='leave Comment'>
+            </form>
+          </div> 
 
-      </div>
-      
-    <% } %>
+        </div>
+        
+      <% } %>
 
   </body>
 </html>

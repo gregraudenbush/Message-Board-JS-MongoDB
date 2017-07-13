@@ -13,15 +13,15 @@ mongoose.connect('mongodb://localhost/basic_mongoose');
 var Schema = mongoose.Schema;
 // define Post Schema
 var PostSchema = new mongoose.Schema({
- name: {type: String, required: true},
- text: {type: String, required: true }, 
+ name: {type: String, required: true, minlength: 2},
+ text: {type: String, required: true, minlength: 2, maxlength: 140 }, 
  comments: [{type: Schema.Types.ObjectId, ref: 'Comment'}]
 }, {timestamps: true });
 // define Comment Schema
 var CommentSchema = new mongoose.Schema({
  _post: {type: Schema.Types.ObjectId, ref: 'Post'},
- text: {type: String, required: true }, 
- name: {type: String, required: true} 
+ text: {type: String, required: true, minlength: 2 }, 
+ name: {type: String, required: true, minlength: 2} 
 }, {timestamps: true });
 // set our models by passing them their respective Schemas
 mongoose.model('Post', PostSchema);
@@ -45,9 +45,14 @@ app.post('/message', function(req, res) {
     post.save(function(err) {
       if(err) {
         console.log('something went wrong');
-        res.render('index', {title: 'you have errors!', errors: pack.errors} )
+        // Post.find({})
+        // .populate('comments')
+        //   .exec(function(err, data) {
+        //     res.render('index', {message: data, title: 'you have errors!', errors: post.errors });
+        //   });
+        res.redirect('/')
       } else { // else console.log that we did well and then redirect to the root route
-        console.log('successfully added a user!');
+        console.log('successfully added a post!');
         res.redirect('/');
       }
     })
@@ -71,30 +76,14 @@ app.post('/posts/:id', function (req, res){
    });
  });
 
-//  app.get('/', function(req, res) {
-//   var post = Post.find({}, function(err, data){
-      
-//       if (err){
-//         console.log(err)  
-//       }
-//         console.log(data)
-      
-//       res.render('index', {message: data});
-//     })
-// })
+
 
 app.get('/', function(req, res) {
-  var post = Post.find({}, function(err, data){
-      
-      
-      if (err){
-        console.log(err)
-        
-      }
-        console.log(data)
-      
+  Post.find({})
+  .populate('comments')
+ .exec(function(err, data) {
       res.render('index', {message: data});
-    })
+        });
 })
 
 
