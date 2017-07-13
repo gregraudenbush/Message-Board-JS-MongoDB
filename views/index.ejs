@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+    *{
+      background-color: pink;
+      color: slateblue;
+    }
+    .postpost{
+      
+      border-style: solid;
+      border-width: 1px;
+      color:black;
+      margin: 5px;
+      padding: 5px;
+
+
+    }
+    .comment{
+      
+      margin-left: 25px;
+      color:black;
+
+    }
+    </style>
+  </head>
+  <body>
+    <h1>The Dojo Message Board</h1>
+
+    
+      <form  action="message" method="POST">
+          Name: <br>
+            <input type="text" name="name" ><br>
+          Message: <br>
+            <textarea name="text" rows="5" cols="80"></textarea><br>
+            <input type='submit' value='Post Message'>
+      </form>
+    
+    
+    <% for(var i=0; i < message.length; i++) { %>
+      <div class="postpost">
+        
+        <p><%= message[i].name %></p>
+        <p><%= message[i].text %>  </p>
+        <div class="comment">
+          <% for(var x=0; x < message[i].comments.length; x++) { %>
+          
+            
+                <p><%= message[i].comments[x] %>  </p>
+            
+              
+            <% } %>
+          
+          <form  action="/posts/<%= message[i].id %>" method="POST">
+            <input type="hidden" value="<%= message[i].id %>">
+            Name: <br>
+              <input type="text" name="name" ><br>
+            Comment: <br>
+              <textarea name="text" rows="5" cols="80"></textarea><br>
+              <input type='submit' value='leave Comment'>
+          </form>
+        </div> 
+
+      </div>
+      
+    <% } %>
+
+  </body>
+</html>
